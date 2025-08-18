@@ -1,0 +1,19 @@
+common:
+  welcome: "Hello! I can relay livestreams to Telegram via FFmpeg. Use /help to see commands."
+  help: "Commands: /setlang, /mode, /config, /stream_add, /stream_stop, /stats"
+  language_set: "Language changed to {lang}."
+  not_allowed: "You are not allowed to use this command."
+  ok: "Done."
+  unknown: "Unknown command or arguments."
+
+admin:
+  mode_switched: "Mode is now: {mode}"
+  config_item: "{k} = {v}"
+  config_set: "Set {k} = {v}"
+  stats: "Stats: commands={commands}, relays_started={relays_started}, relays_failed={relays_failed}"
+  stream_added: "Relay started. Task ID: {task_id}"
+  stream_stopped: "Stop signal sent for Task ID: {task_id}"
+
+stream:
+  starting: "Starting relay..."
+  failed: "Failed to start relay."

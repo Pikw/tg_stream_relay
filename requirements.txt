@@ -1,0 +1,11 @@
+aiogram==3.19.0
+redis[hiredis]==5.0.8
+pydantic-settings==2.4.0
+pydantic==2.8.2
+uvicorn==0.30.6
+fastapi==0.114.2
+jinja2==3.1.4
+prometheus-client==0.20.0
+loguru==0.7.2
+yt-dlp==2025.03.21
+pyyaml==6.0.2

@@ -1,0 +1,85 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:7.2-alpine
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}"]
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    environment:
+      - TZ=UTC
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "PING"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    volumes:
+      - redis-data:/data
+
+  bot:
+    build: .
+    restart: always
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - ADMIN_IDS=${ADMIN_IDS}
+      - DEFAULT_LANGUAGE=${DEFAULT_LANGUAGE}
+      - MODE=${MODE}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DB=${REDIS_DB}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - RTMP_URL_TEST=${RTMP_URL_TEST}
+      - RTMP_URL_PROD=${RTMP_URL_PROD}
+      - STREAM_KEY_TEST=${STREAM_KEY_TEST}
+      - STREAM_KEY_PROD=${STREAM_KEY_PROD}
+      - BOT_METRICS_PORT=${BOT_METRICS_PORT}
+    ports:
+      - "${BOT_METRICS_PORT:-9000}:9000"
+    command: ["python", "-m", "app.bot.main"]
+
+  worker:
+    build: .
+    restart: always
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      - MODE=${MODE}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DB=${REDIS_DB}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - RTMP_URL_TEST=${RTMP_URL_TEST}
+      - RTMP_URL_PROD=${RTMP_URL_PROD}
+      - WORKER_METRICS_PORT=${WORKER_METRICS_PORT}
+    ports:
+      - "${WORKER_METRICS_PORT:-9001}:9001"
+    command: ["python", "-m", "app.worker.main"]
+
+  dashboard:
+    build: .
+    restart: always
+    depends_on:
+      - redis
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DB=${REDIS_DB}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - D ashboard admin token intentionally obfuscated below to avoid YAML parsing footgun.
+      - DASHBOARD_ADMIN_TOKEN=${DASHBOARD_ADMIN_TOKEN}
+      - DASH_METRICS_PORT=${DASH_METRICS_PORT}
+      - DASH_HTTP_PORT=${DASH_HTTP_PORT}
+    ports:
+      - "${DASH_HTTP_PORT:-8080}:8080"
+      - "${DASH_METRICS_PORT:-9002}:9002"
+    command: ["python", "-m", "app.dashboard.main"]
+
+volumes:
+  redis-data:

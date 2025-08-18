@@ -1,0 +1,19 @@
+common:
+  welcome: "Привет! Я могу ретранслировать прямые эфиры в Telegram через FFmpeg. Команда /help покажет возможности."
+  help: "Команды: /setlang, /mode, /config, /stream_add, /stream_stop, /stats"
+  language_set: "Язык изменён на {lang}."
+  not_allowed: "У вас нет прав на эту команду."
+  ok: "Готово."
+  unknown: "Неизвестная команда или аргументы."
+
+admin:
+  mode_switched: "Режим переключён: {mode}"
+  config_item: "{k} = {v}"
+  config_set: "Установлено {k} = {v}"
+  stats: "Статистика: команды={commands}, запусков={relays_started}, ошибок={relays_failed}"
+  stream_added: "Ретрансляция запущена. ID задачи: {task_id}"
+  stream_stopped: "Отправлен сигнал остановки для ID: {task_id}"
+
+stream:
+  starting: "Запускаю ретрансляцию..."
+  failed: "Не удалось запустить ретрансляцию."
