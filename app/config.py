@@ -1,10 +1,11 @@
 from pydantic_settings import BaseSettings
 from pydantic import Field
 from typing import List
-
+from typing import Optional
 
 class Settings(BaseSettings):
-    bot_token: str = Field(env="BOT_TOKEN")
+#    bot_token: str = Field(env="BOT_TOKEN")
+    bot_token: Optional[str] = Field(default=None, env="BOT_TOKEN")
     admin_ids: List[int] = Field(default_factory=list, env="ADMIN_IDS")
     default_language: str = Field(default="ru", env="DEFAULT_LANGUAGE")
     mode: str = Field(default="prod", env="MODE")  # "test" | "prod"

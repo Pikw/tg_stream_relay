@@ -28,6 +28,9 @@ async def main():
     setup_logging("bot", settings.log_level, logfile="bot.log")
     start_http_server(settings.bot_metrics_port)
 
+    if not settings.bot_token:
+        raise RuntimeError("BOT_TOKEN is missing. Set it in your .env or compose for the bot service.")
+
     bot = Bot(token=settings.bot_token, default=DefaultBotProperties(parse_mode="HTML"))
     dp = Dispatcher(storage=RedisStorage.from_url(url=os.environ.get("REDIS_URL") or ""))
 
